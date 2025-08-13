@@ -17,7 +17,28 @@
             color: #e2e8f0;
         }
         @import url('https://rsms.me/inter/inter.css');
-        
+
+        /* Responsive container for all main content */
+        .container, main.container {
+            width: 100%;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        @media (min-width: 1024px) {
+            .container, main.container {
+                padding-left: 2rem;
+                padding-right: 2rem;
+            }
+        }
+        @media (min-width: 1280px) {
+            .container, main.container {
+                max-width: 1400px;
+            }
+        }
+
         .nav-link {
             transition: all 0.3s ease;
             border-bottom: 2px solid transparent;
@@ -192,29 +213,145 @@
        .btn-primary:hover {
             background-color: #5eead4;
         }
+        /* Mobile-first navigation toggle */
+        @media (max-width: 767px) {
+            .mobile-nav-backdrop {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(15, 23, 42, 0.7);
+                z-index: 48;
+            }
+            .mobile-nav-menu {
+                display: none;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                right: auto;
+                width: 90vw;
+                max-width: 400px;
+                bottom: auto;
+                background-color: #0f172a;
+                z-index: 49;
+                padding-top: 3rem;
+                overflow-y: auto;
+                border-radius: 1.5rem;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+                transform: translate(-50%, -50%);
+            }
+            .mobile-nav-menu ul {
+                flex-direction: column;
+            }
+            .mobile-nav-menu ul li {
+                width: 100%;
+                text-align: center;
+            }
+            .mobile-nav-menu a {
+                display: block;
+                padding: 1.25rem 0;
+                font-size: 1.35rem;
+                border-radius: 0.75rem;
+                margin: 0.25rem 0;
+            }
+            .mobile-nav-menu a:active, .mobile-nav-menu a:focus {
+                background: #134e4a;
+                color: #5eead4;
+            }
+            .nav-link {
+                border-bottom: none;
+            }
+        }
+
+        /* Improve grid layouts for laptop/desktop */
+        @media (min-width: 1024px) {
+            .grid.md\:grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            .grid.md\:grid-cols-3 {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+            .grid.lg\:grid-cols-3 {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+            .grid.lg\:grid-cols-5 {
+                grid-template-columns: repeat(5, minmax(0, 1fr));
+            }
+        }
+
+        /* Make interactive boxes and forms more readable on large screens */
+        @media (min-width: 1024px) {
+            .interactive-box, .generated-output-box {
+                padding: 2rem !important;
+            }
+            .form-group input, .form-group textarea, .form-group select {
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Ensure badge builder and preview scale well */
+        @media (min-width: 1024px) {
+            #badge-preview {
+                max-width: 100%;
+                height: auto;
+            }
+        }
     </style>
 </head>
 <body class="text-slate-300 transition-colors duration-500">
 
-    <header class="bg-slate-800 shadow-sm sticky top-0 z-50 transition-colors duration-500">
-        <div class="container mx-auto px-4 py-4 flex items-center justify-between">
-            <div class="text-center flex-grow">
-                <h1 class="text-2xl md:text-3xl font-bold text-slate-50 transition-colors duration-500">The Fantastic GitHub README Guide</h1>
-                <p class="text-slate-400 mt-1 transition-colors duration-500">An interactive journey to crafting a profile that stands out.</p>
+    <header class="bg-slate-800 shadow-sm sticky top-0 z-50 transition-colors duration-500" role="banner">
+        <div class="container mx-auto px-4 py-4 flex flex-col items-center md:py-0">
+            <div class="w-full">
+                <div class="flex items-center md:hidden w-full justify-start mt-2">
+                    <button id="mobile-menu-toggle" class="p-2 text-slate-400 hover:text-slate-200 focus:outline-none" aria-label="Open navigation menu" aria-controls="mobile-menu" aria-expanded="false" style="margin-left:0;">
+                        <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="w-full flex flex-col items-center mt-12 mb-4">
+                    <h1 class="text-4xl md:text-6xl font-extrabold text-white text-center transition-colors duration-500 mb-2 leading-tight" tabindex="0" style="letter-spacing: -1px;">
+                        The Fantastic GitHub README Guide
+                    </h1>
+                    <p class="text-lg md:text-2xl font-normal text-white text-center transition-colors duration-500 mb-0 md:mb-2" style="max-width: 700px; margin-left: auto; margin-right: auto;">
+                        An interactive journey to crafting a profile that stands out.
+                    </p>
+                </div>
             </div>
-        </div>
-        <nav id="main-nav" class="border-t border-slate-700 transition-colors duration-500">
-            <ul class="container mx-auto flex flex-wrap justify-center gap-x-4 gap-y-2 md:gap-x-8 py-2">
-                <li><a href="#why" class="nav-link font-semibold pb-1" data-section="why">Why It Matters</a></li>
-                <li><a href="#blueprint" class="nav-link font-semibold pb-1" data-section="blueprint">The Blueprint</a></li>
-                <li><a href="#personalize" class="nav-link font-semibold pb-1" data-section="personalize">Personalize & Showcase</a></li>
-                <li><a href="#dynamic" class="nav-link font-semibold pb-1" data-section="dynamic">Go Dynamic</a></li>
-                <li><a href="#design" class="nav-link font-semibold pb-1" data-section="design">Design & Style</a></li>
-                <li><a href="#generator" class="nav-link font-semibold pb-1" data-section="generator">README Generator</a></li>
-                <li><a href="#strategy" class="nav-link font-semibold pb-1" data-section="strategy">Strategy & Pitfalls</a></li>
-                <li><a href="#toolkit" class="nav-link font-semibold pb-1" data-section="toolkit">Toolkit</a></li>
-            </ul>
-        </nav>
+            <!-- Removed right hamburger menu button -->
+            <div class="mobile-nav-backdrop" id="mobile-nav-backdrop"></div>
+             <div id="mobile-menu" class="mobile-nav-menu" aria-label="Mobile navigation" aria-modal="true" role="dialog" tabindex="-1">
+                 <button id="mobile-menu-close" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-200 focus:outline-none md:hidden" aria-label="Close navigation menu">
+                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                     </svg>
+                 </button>
+                 <ul class="flex flex-col items-center gap-8 py-8 px-4">
+                     <li><a href="#why" class="nav-link font-semibold pb-1 text-2xl" data-section="why" tabindex="0" title="Why a README matters">Why It Matters</a></li>
+                     <li><a href="#blueprint" class="nav-link font-semibold pb-1 text-2xl" data-section="blueprint" tabindex="0" title="Blueprint for a great README">The Blueprint</a></li>
+                     <li><a href="#personalize" class="nav-link font-semibold pb-1 text-2xl" data-section="personalize" tabindex="0" title="Personalize and showcase">Personalize & Showcase</a></li>
+                     <li><a href="#dynamic" class="nav-link font-semibold pb-1 text-2xl" data-section="dynamic" tabindex="0" title="Add dynamic elements">Go Dynamic</a></li>
+                     <li><a href="#design" class="nav-link font-semibold pb-1 text-2xl" data-section="design" tabindex="0" title="Design and style tips">Design & Style</a></li>
+                     <li><a href="#generator" class="nav-link font-semibold pb-1 text-2xl" data-section="generator" tabindex="0" title="README generator tool">README Generator</a></li>
+                     <li><a href="#strategy" class="nav-link font-semibold pb-1 text-2xl" data-section="strategy" tabindex="0" title="Strategy and pitfalls">Strategy & Pitfalls</a></li>
+                     <li><a href="#toolkit" class="nav-link font-semibold pb-1 text-2xl" data-section="toolkit" tabindex="0" title="Toolkit and resources">Toolkit</a></li>
+                 </ul>
+             </div>
+             <nav id="main-nav" class="hidden md:block border-t border-slate-700 transition-colors duration-500 w-full" aria-label="Main navigation">
+                <ul class="container mx-auto flex flex-wrap justify-center gap-x-4 gap-y-2 md:gap-x-8 py-2">
+                    <li><a href="#why" class="nav-link font-semibold pb-1" data-section="why" tabindex="0" title="Why a README matters">Why It Matters</a></li>
+                    <li><a href="#blueprint" class="nav-link font-semibold pb-1" data-section="blueprint" tabindex="0" title="Blueprint for a great README">The Blueprint</a></li>
+                    <li><a href="#personalize" class="nav-link font-semibold pb-1" data-section="personalize" tabindex="0" title="Personalize and showcase">Personalize & Showcase</a></li>
+                    <li><a href="#dynamic" class="nav-link font-semibold pb-1" data-section="dynamic" tabindex="0" title="Add dynamic elements">Go Dynamic</a></li>
+                    <li><a href="#design" class="nav-link font-semibold pb-1" data-section="design" tabindex="0" title="Design and style tips">Design & Style</a></li>
+                    <li><a href="#generator" class="nav-link font-semibold pb-1" data-section="generator" tabindex="0" title="README generator tool">README Generator</a></li>
+                    <li><a href="#strategy" class="nav-link font-semibold pb-1" data-section="strategy" tabindex="0" title="Strategy and pitfalls">Strategy & Pitfalls</a></li>
+                    <li><a href="#toolkit" class="nav-link font-semibold pb-1" data-section="toolkit" tabindex="0" title="Toolkit and resources">Toolkit</a></li>
+                </ul>
+            </nav>
     </header>
 
     <main class="container mx-auto p-4 md:p-8">
@@ -322,7 +459,8 @@
                     <p class="text-slate-400 transition-colors duration-500">Include a project roadmap, contribution guidelines, or a link to a bug tracker. This signals transparency, a forward-thinking approach, and openness to collaboration.</p>
                 </div>
                 <div class="interactive-box p-6 bg-slate-700 border-teal-700 rounded-lg transition-colors duration-500">
-                    <h3 class="font-bold text-lg text-teal-200 transition-colors duration-500 mb-2">🚀 Pro Tip: The Narrative</h3>
+                    <div class="text-6xl font-extrabold text-teal-400 mb-4">💡</div>
+                    <h3 class="text-xl font-bold text-teal-200 mb-2">🚀 Pro Tip: The Narrative</h3>
                     <p class="text-teal-300 transition-colors duration-500">Weave these elements into a story. Your "About Me" introduces the character (you), your skills are your tools, and your projects are the adventures you've been on. </p>
                 </div>
             </div>
@@ -704,14 +842,22 @@ AI-based content tagging" class="form-input"></textarea>
             </div>
         </section>
 
+
     </main>
+
+    <footer class="w-full bg-slate-800 py-4 mt-12 text-center text-slate-300 text-sm border-t border-slate-700">
+        Made with <span style="color:#ef4444;">&#10084;&#65039;</span> by Utsav
+    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const navContainer = document.getElementById('main-nav');
             const navLinks = navContainer.querySelectorAll('.nav-link');
             const sections = document.querySelectorAll('.content-section');
-
+            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuClose = document.getElementById('mobile-menu-close');
+            
             const markdownData = {
                 heading: {
                     syntax: '# Heading 1\n## Heading 2\n### Heading 3',
@@ -842,9 +988,12 @@ AI-based content tagging" class="form-input"></textarea>
                 navLinks.forEach(link => {
                     link.classList.remove('active');
                 });
-
+                mobileMenu.style.display = 'none';
+                document.body.style.overflow = '';
+                
                 const targetSection = document.getElementById(sectionId);
                 const targetLink = navContainer.querySelector(`[data-section="${sectionId}"]`);
+                const mobileTargetLink = mobileMenu.querySelector(`[data-section="${sectionId}"]`);
 
                 if (targetSection) {
                     targetSection.classList.add('active');
@@ -852,8 +1001,21 @@ AI-based content tagging" class="form-input"></textarea>
                 if (targetLink) {
                     targetLink.classList.add('active');
                 }
+                if (mobileTargetLink) {
+                    mobileTargetLink.classList.add('active');
+                }
             };
 
+
+            // Keyboard navigation for nav links
+            function handleNavKeydown(e) {
+                if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('nav-link')) {
+                    e.preventDefault();
+                    const sectionId = e.target.dataset.section;
+                    window.history.pushState(null, '', `#${sectionId}`);
+                    showSection(sectionId);
+                }
+            }
             navContainer.addEventListener('click', (e) => {
                 if (e.target.matches('.nav-link')) {
                     e.preventDefault();
@@ -862,39 +1024,66 @@ AI-based content tagging" class="form-input"></textarea>
                     showSection(sectionId);
                 }
             });
+            navContainer.addEventListener('keydown', handleNavKeydown);
+
+            // Mobile menu logic
+
+            // Mobile menu backdrop and open/close logic
+            const mobileNavBackdrop = document.getElementById('mobile-nav-backdrop');
+            mobileMenuToggle.addEventListener('click', () => {
+                mobileMenu.style.display = 'block';
+                mobileNavBackdrop.style.display = 'block';
+                setTimeout(() => { mobileNavBackdrop.style.opacity = 1; }, 10);
+                document.body.style.overflow = 'hidden';
+            });
+
+            function closeMobileMenu() {
+                mobileMenu.style.display = 'none';
+                mobileNavBackdrop.style.display = 'none';
+                mobileNavBackdrop.style.opacity = 0;
+                document.body.style.overflow = '';
+            }
+
+            mobileMenuClose.addEventListener('click', closeMobileMenu);
+            mobileNavBackdrop.addEventListener('click', closeMobileMenu);
+            
+
+            // Keyboard navigation for mobile nav links
+            function handleMobileNavKeydown(e) {
+                if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('nav-link')) {
+                    e.preventDefault();
+                    const sectionId = e.target.dataset.section;
+                    window.history.pushState(null, '', `#${sectionId}`);
+                    showSection(sectionId);
+                    mobileMenu.style.display = 'none';
+                    document.body.style.overflow = '';
+                }
+            }
+            mobileMenu.addEventListener('click', (e) => {
+                if (e.target.matches('.nav-link')) {
+                     e.preventDefault();
+                     const sectionId = e.target.dataset.section;
+                     window.history.pushState(null, '', `#${sectionId}`);
+                     showSection(sectionId);
+                     mobileMenu.style.display = 'none';
+                     document.body.style.overflow = '';
+                }
+            });
+            mobileMenu.addEventListener('keydown', handleMobileNavKeydown);
 
             // Theme toggle logic
-            const currentTheme = localStorage.getItem('theme');
-            if (currentTheme === 'dark') {
-                htmlTag.classList.add('dark');
-            } else {
-                htmlTag.classList.remove('dark');
-            }
+            const htmlTag = document.documentElement;
+            htmlTag.classList.add('dark');
 
             const initialSection = window.location.hash.substring(1) || 'why';
             showSection(initialSection);
-
+            
             // README Generator Logic
             const generatorForm = document.getElementById('readme-generator-form');
             const generatedOutput = document.getElementById('generated-readme-output');
             const copyReadmeBtn = document.getElementById('copy-readme-btn');
             const downloadReadmeBtn = document.getElementById('download-readme-btn');
 
-            const generatorInputs = [
-                'generator-title', 'generator-description', 'generator-about-me',
-                'generator-github-username', 'generator-wakatime-username',
-                'generator-typing-lines', 'generator-steam-id',
-                'generator-linkedin', 'generator-twitter', 'generator-email'
-            ];
-            const generatorCheckboxes = [
-                'include-toc', 'include-installation', 'include-usage', 'include-credits',
-                'include-license', 'include-contributing', 'include-roadmap',
-                'include-tests', 'include-issues',
-                'include-stats-card', 'include-languages-card', 'include-activity-graph',
-                'include-typing-animation', 'include-spotify', 'include-steam', 'include-visitors'
-            ];
-            const generatorSelects = ['generator-license-type'];
-            
             const newGeneratorInputs = [
                 'generator-title', 'generator-tagline', 'generator-about',
                 'generator-live-demo', 'generator-repo-url',
@@ -909,7 +1098,7 @@ AI-based content tagging" class="form-input"></textarea>
                 'include-stats-card', 'include-languages-card', 'include-activity-graph',
                 'include-typing-animation', 'include-spotify', 'include-steam', 'include-visitors',
                 'include-toc', 'include-credits', 'include-contributing', 'include-license',
-                'include-tests', 'include-issues',
+                'include-tests', 'include-issues', 'include-roadmap'
             ];
             
             const newGeneratorSelects = ['generator-license-type'];
@@ -917,18 +1106,20 @@ AI-based content tagging" class="form-input"></textarea>
 
             // Enable/disable related inputs for checkboxes
             document.getElementById('include-license').addEventListener('change', (e) => {
-                document.getElementById('generator-license-type').disabled = !e.target.checked;
+                const licenseSelect = document.getElementById('generator-license-type');
+                licenseSelect.disabled = !e.target.checked;
                 generateReadme();
             });
             document.getElementById('include-typing-animation').addEventListener('change', (e) => {
-                document.getElementById('generator-typing-lines').disabled = !e.target.checked;
+                const typingLinesInput = document.getElementById('generator-typing-lines');
+                typingLinesInput.disabled = !e.target.checked;
                 generateReadme();
             });
             document.getElementById('include-steam').addEventListener('change', (e) => {
-                document.getElementById('generator-steam-id').disabled = !e.target.checked;
+                const steamIdInput = document.getElementById('generator-steam-id');
+                steamIdInput.disabled = !e.target.checked;
                 generateReadme();
             });
-
 
             function generateReadme() {
                 let markdown = '';
@@ -961,17 +1152,17 @@ AI-based content tagging" class="form-input"></textarea>
                 // Table of Contents
                 if (document.getElementById('include-toc').checked) {
                     markdown += `## Table of Contents\n\n- [Project Overview](#project-overview)\n`;
-                    if (features.length > 0) markdown += `- [Features](#features)\n`;
-                    if (techStack.length > 0) markdown += `- [Tech Stack](#tech-stack)\n`;
-                    if (gettingStarted) markdown += `- [Getting Started](#getting-started)\n`;
-                    if (liveDemoUrl) markdown += `- [Live Demo](#live-demo)\n`;
-                    if (futurePlans.length > 0) markdown += `- [Future Plans](#future-plans)\n`;
+                    if (features.length > 0) markdown += `- [Features](#-features)\n`;
+                    if (techStack.length > 0) markdown += `- [Tech Stack](#-tech-stack)\n`;
+                    if (gettingStarted) markdown += `- [Getting Started](#-getting-started)\n`;
+                    if (liveDemoUrl) markdown += `- [Live Demo](#-live-demo)\n`;
+                    if (futurePlans.length > 0) markdown += `- [Future Plans](#-future-plans)\n`;
                     if (document.getElementById('include-stats-card').checked || document.getElementById('include-languages-card').checked || document.getElementById('include-activity-graph').checked || document.getElementById('include-typing-animation').checked || document.getElementById('include-spotify').checked || document.getElementById('include-steam').checked || document.getElementById('include-visitors').checked) {
                         markdown += `- [My GitHub Stats](#my-github-stats)\n`;
                     }
-                    if (document.getElementById('include-credits').checked) markdown += `- [Credits](#credits)\n`;
-                    if (document.getElementById('include-contributing').checked) markdown += `- [Contributing](#contributing)\n`;
-                    if (document.getElementById('include-license').checked) markdown += `- [License](#license)\n`;
+                    if (document.getElementById('include-credits').checked) markdown += `- [Credits](#-credits)\n`;
+                    if (document.getElementById('include-contributing').checked) markdown += `- [Contributing](#-contributing)\n`;
+                    if (document.getElementById('include-license').checked) markdown += `- [License](#-license)\n`;
                     if (document.getElementById('include-tests').checked) markdown += `- [Tests](#tests)\n`;
                     if (document.getElementById('include-issues').checked) markdown += `- [Known Issues](#known-issues)\n`;
                     if (linkedin || twitter || email) {
@@ -1056,16 +1247,16 @@ AI-based content tagging" class="form-input"></textarea>
 
                 // Contributing
                 if (document.getElementById('include-contributing').checked) {
-                    markdown += `## 🤝 Contributing\n\nContributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.\n\n1. Fork the repository\n2. Add your changes\n3. Submit a pull request\n\nHelp us make academic resources accessible to all students �\n\n`;
+                    markdown += `## 🤝 Contributing\n\nContributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.\n\n1. Fork the repository\n2. Add your changes\n3. Submit a pull request\n\nHelp us make academic resources accessible to all students 🚀\n\n`;
                 }
 
                 // Roadmap (Future Plans)
-                if (futurePlans.length > 0) {
-                    markdown += `## 🧠 Future Plans\n\n`;
-                    futurePlans.forEach(plan => {
-                        markdown += `- ${plan.trim()}\n`;
-                    });
-                    markdown += `\n`;
+                if (document.getElementById('include-roadmap').checked && futurePlans.length > 0) {
+                     markdown += `## 🧠 Future Plans\n\n`;
+                     futurePlans.forEach(plan => {
+                         markdown += `- ${plan.trim()}\n`;
+                     });
+                     markdown += `\n`;
                 }
 
                 // Tests
@@ -1095,7 +1286,7 @@ AI-based content tagging" class="form-input"></textarea>
 
                 generatedOutput.value = markdown.trim();
             }
-
+            
             // Attach event listeners to all relevant inputs
             newGeneratorInputs.forEach(id => {
                 const element = document.getElementById(id);
