@@ -1,27 +1,34 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Guide to a Fantastic GitHub README</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chosen Palette: Warm Neutral (Slate, Stone, with a soft Teal accent) -->
+    <!-- Chosen Palette: Dynamic (Light: Warm Neutrals with Teal. Dark: Dark Slate with Vibrant Teal.) -->
     <!-- Application Structure Plan: A single-page application with a fixed top navigation bar controlling visibility of distinct thematic content sections. This non-linear, task-oriented structure was chosen over a simple scroll to allow users (developers, recruiters) to directly access specific information (e.g., dynamic tools, Markdown syntax) without navigating through irrelevant content, enhancing usability and information retrieval speed. Key interactions include a live Markdown previewer and a dynamic element simulator to transform passive reading into active learning. -->
     <!-- Visualization & Content Choices: The report's textual information is transformed into interactive components. Goal: Organize/Learn -> Viz: Interactive Markdown Previewer (HTML/JS) -> Interaction: Click list to see live preview -> Justification: Teaches syntax more effectively than a static table. Goal: Inform/Compare -> Viz: Dynamic Element Simulator (HTML/JS) -> Interaction: Select tools/options to see generated images/code -> Justification: Demonstrates tool capabilities interactively. Goal: Inform -> Viz: Interactive Badge Builder (HTML/JS) -> Interaction: User inputs generate badge preview -> Justification: Provides a practical, hands-on utility. This approach prioritizes interactive learning over static data charts, which are irrelevant to the source material. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
-            background-color: #f8fafc; /* slate-50 */
+            background-color: #0f172a;
             font-family: 'Inter', sans-serif;
+            transition: background-color 0.5s ease;
+            color: #e2e8f0;
         }
         @import url('https://rsms.me/inter/inter.css');
+        
         .nav-link {
             transition: all 0.3s ease;
             border-bottom: 2px solid transparent;
+            color: #94a3b8;
+        }
+        .nav-link:hover {
+            color: #5eead4;
         }
         .nav-link.active {
-            color: #0f766e; /* teal-700 */
-            border-bottom-color: #0f766e; /* teal-700 */
+            color: #99f6e4;
+            border-bottom-color: #99f6e4;
         }
         .content-section {
             display: none;
@@ -35,11 +42,11 @@
             to { opacity: 1; transform: translateY(0); }
         }
         .interactive-box {
-            background-color: #ffffff;
-            border: 1px solid #e2e8f0; /* slate-200 */
-            border-radius: 0.75rem;
+            background-color: #1e293b;
+            border: 1px solid #475569;
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            transition: box-shadow 0.3s ease;
+            border-radius: 0.75rem;
+            transition: box-shadow 0.3s ease, background-color 0.5s ease;
         }
         .interactive-box:hover {
             box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
@@ -51,11 +58,11 @@
             transition: background-color 0.2s ease;
         }
         .interactive-list-item:hover {
-            background-color: #f1f5f9; /* slate-100 */
+            background-color: #334155;
         }
         .interactive-list-item.selected {
-            background-color: #ccfbf1; /* teal-100 */
-            color: #134e4a; /* teal-900 */
+            background-color: #0f766e;
+            color: #e2e8f0;
             font-weight: 600;
         }
         .custom-prose {
@@ -65,12 +72,12 @@
             font-size: 1.25rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
-            color: #1e293b; /* slate-800 */
+            color: #e2e8f0;
         }
         .custom-prose p {
             margin-bottom: 1rem;
             line-height: 1.6;
-            color: #475569; /* slate-600 */
+            color: #94a3b8;
         }
         .custom-prose ul {
             list-style-position: inside;
@@ -79,19 +86,19 @@
         }
         .custom-prose li {
             margin-bottom: 0.5rem;
-            color: #475569; /* slate-600 */
+            color: #94a3b8;
         }
         .custom-prose code {
-            background-color: #e2e8f0;
-            color: #1e293b;
+            background-color: #334155;
+            color: #e2e8f0;
             padding: 0.2em 0.4em;
             margin: 0;
             font-size: 85%;
             border-radius: 6px;
         }
         .custom-prose pre {
-            background-color: #1e293b; /* slate-800 */
-            color: #e2e8f0; /* slate-200 */
+            background-color: #0f172a;
+            color: #e2e8f0;
             padding: 1rem;
             border-radius: 0.5rem;
             overflow-x: auto;
@@ -102,47 +109,120 @@
             padding: 0;
         }
         .custom-prose blockquote {
-            border-left: 4px solid #99f6e4; /* teal-200 */
+            border-left: 4px solid #14b8a6;
             padding-left: 1rem;
             margin-left: 0;
             font-style: italic;
-            color: #334155; /* slate-700 */
+            color: #94a3b8;
         }
         .custom-prose a {
-            color: #0d9488; /* teal-600 */
+            color: #2dd4bf;
             text-decoration: underline;
             font-weight: 500;
         }
+        /* Styles for the new generator section */
+       .form-group {
+            margin-bottom: 1.5rem;
+        }
+       .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #e2e8f0;
+        }
+       .form-group input[type="text"],
+       .form-group input[type="url"],
+       .form-group input[type="email"],
+       .form-group textarea,
+       .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #475569;
+            border-radius: 0.5rem;
+            background-color: #334155;
+            color: #e2e8f0;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
+        }
+       .form-group input[type="checkbox"] {
+            margin-right: 0.5rem;
+        }
+       .form-group.checkbox-label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+            color: #94a3b8;
+            cursor: pointer;
+        }
+       .form-section-heading {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2dd4bf;
+            margin-top: 2rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #14b8a6;
+            padding-bottom: 0.5rem;
+        }
+       .generated-output-box {
+            background-color: #1e293b;
+            border: 1px solid #475569;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            margin-top: 2rem;
+        }
+       .generated-output-box textarea {
+            background-color: #0f172a;
+            color: #e2e8f0;
+            font-family: monospace;
+            font-size: 0.875rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            width: 100%;
+            min-height: 400px;
+            resize: vertical;
+            border: none;
+        }
+       .btn-primary {
+            background-color: #2dd4bf;
+            color: #134e4a;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease;
+        }
+       .btn-primary:hover {
+            background-color: #5eead4;
+        }
     </style>
 </head>
-<body class="text-slate-700">
+<body class="text-slate-300 transition-colors duration-500">
 
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-4">
-            <div class="text-center">
-                <h1 class="text-2xl md:text-3xl font-bold text-slate-800">The Fantastic GitHub README Guide</h1>
-                <p class="text-slate-500 mt-1">An interactive journey to crafting a profile that stands out.</p>
+    <header class="bg-slate-800 shadow-sm sticky top-0 z-50 transition-colors duration-500">
+        <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="text-center flex-grow">
+                <h1 class="text-2xl md:text-3xl font-bold text-slate-50 transition-colors duration-500">The Fantastic GitHub README Guide</h1>
+                <p class="text-slate-400 mt-1 transition-colors duration-500">An interactive journey to crafting a profile that stands out.</p>
             </div>
-            <nav id="main-nav" class="mt-4">
-                <ul class="flex flex-wrap justify-center gap-x-4 gap-y-2 md:gap-x-8">
-                    <li><a href="#why" class="nav-link font-semibold pb-1" data-section="why">Why It Matters</a></li>
-                    <li><a href="#blueprint" class="nav-link font-semibold pb-1" data-section="blueprint">The Blueprint</a></li>
-                    <li><a href="#personalize" class="nav-link font-semibold pb-1" data-section="personalize">Personalize & Showcase</a></li>
-                    <li><a href="#dynamic" class="nav-link font-semibold pb-1" data-section="dynamic">Go Dynamic</a></li>
-                    <li><a href="#design" class="nav-link font-semibold pb-1" data-section="design">Design & Style</a></li>
-                    <li><a href="#strategy" class="nav-link font-semibold pb-1" data-section="strategy">Strategy & Pitfalls</a></li>
-                    <li><a href="#toolkit" class="nav-link font-semibold pb-1" data-section="toolkit">Toolkit</a></li>
-                </ul>
-            </nav>
         </div>
+        <nav id="main-nav" class="border-t border-slate-700 transition-colors duration-500">
+            <ul class="container mx-auto flex flex-wrap justify-center gap-x-4 gap-y-2 md:gap-x-8 py-2">
+                <li><a href="#why" class="nav-link font-semibold pb-1" data-section="why">Why It Matters</a></li>
+                <li><a href="#blueprint" class="nav-link font-semibold pb-1" data-section="blueprint">The Blueprint</a></li>
+                <li><a href="#personalize" class="nav-link font-semibold pb-1" data-section="personalize">Personalize & Showcase</a></li>
+                <li><a href="#dynamic" class="nav-link font-semibold pb-1" data-section="dynamic">Go Dynamic</a></li>
+                <li><a href="#design" class="nav-link font-semibold pb-1" data-section="design">Design & Style</a></li>
+                <li><a href="#generator" class="nav-link font-semibold pb-1" data-section="generator">README Generator</a></li>
+                <li><a href="#strategy" class="nav-link font-semibold pb-1" data-section="strategy">Strategy & Pitfalls</a></li>
+                <li><a href="#toolkit" class="nav-link font-semibold pb-1" data-section="toolkit">Toolkit</a></li>
+            </ul>
+        </nav>
     </header>
 
     <main class="container mx-auto p-4 md:p-8">
         
         <section id="why" class="content-section">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-slate-800 mb-2">The Strategic Imperative</h2>
-                <p class="text-lg text-slate-500 max-w-3xl mx-auto">Your GitHub profile README is more than a file; it's your digital storefront, a professional narrative that shapes perception and creates opportunities.</p>
+                <h2 class="text-3xl font-bold text-slate-100 transition-colors duration-500 mb-2">The Strategic Imperative</h2>
+                <p class="text-lg text-slate-400 transition-colors duration-500 max-w-3xl mx-auto">Your GitHub profile README is more than a file; it's your digital storefront, a professional narrative that shapes perception and creates opportunities.</p>
             </div>
 
             <div class="grid md:grid-cols-2 gap-8 items-center">
@@ -153,43 +233,43 @@
                     <h3>A Tool for Recruiters & Interviews</h3>
                     <p>Employers actively examine GitHub profiles to gain insights into your work, coding style, and open-source engagement. A great README helps you:</p>
                     <ul>
-                        <li><span class="font-semibold text-teal-700">Validate Skills:</span> Quickly confirm your claimed skills and interests for recruiters.</li>
-                        <li><span class="font-semibold text-teal-700">Showcase Problem-Solving:</span> Provide tangible evidence of your coding habits and capabilities.</li>
-                        <li><span class="font-semibold text-teal-700">Guide Conversations:</span> Steer interview discussions towards topics where you have deep knowledge and passion.</li>
+                        <li><span class="font-semibold text-teal-400">Validate Skills:</span> Quickly confirm your claimed skills and interests for recruiters.</li>
+                        <li><span class="font-semibold text-teal-400">Showcase Problem-Solving:</span> Provide tangible evidence of your coding habits and capabilities.</li>
+                        <li><span class="font-semibold text-teal-400">Guide Conversations:</span> Steer interview discussions towards topics where you have deep knowledge and passion.</li>
                     </ul>
                 </div>
-                <div class="interactive-box p-8 text-center bg-teal-50 border-teal-200">
-                    <div class="text-6xl font-extrabold text-teal-600 mb-4">💡</div>
-                    <h3 class="text-xl font-bold text-teal-800 mb-2">The "Slight Edge"</h3>
-                    <p class="text-teal-700">While not a replacement for interview performance, an active, well-documented GitHub profile can give you a "slight edge" with recruiters, especially for entry-level roles where visual indicators of activity are often scrutinized.</p>
+                <div class="interactive-box p-8 text-center bg-slate-700 border-teal-700 rounded-lg">
+                    <div class="text-6xl font-extrabold text-teal-400 mb-4">💡</div>
+                    <h3 class="text-xl font-bold text-teal-200 mb-2">The "Slight Edge"</h3>
+                    <p class="text-teal-300">While not a replacement for interview performance, an active, well-documented GitHub profile can give you a "slight edge" with recruiters, especially for entry-level roles where visual indicators of activity are often scrutinized.</p>
                 </div>
             </div>
         </section>
 
         <section id="blueprint" class="content-section">
              <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-slate-800 mb-2">The README Blueprint</h2>
-                <p class="text-lg text-slate-500 max-w-3xl mx-auto">Master the foundational elements and syntax to build a clear, well-structured, and readable README.</p>
+                <h2 class="text-3xl font-bold text-slate-100 transition-colors duration-500 mb-2">The README Blueprint</h2>
+                <p class="text-lg text-slate-400 transition-colors duration-500 max-w-3xl mx-auto">Master the foundational elements and syntax to build a clear, well-structured, and readable README.</p>
             </div>
 
             <div class="mb-12">
-                <h3 class="text-2xl font-semibold text-slate-700 text-center mb-6">Core Components Checklist</h3>
+                <h3 class="text-2xl font-semibold text-slate-200 transition-colors duration-500 text-center mb-6">Core Components Checklist</h3>
                 <div class="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div class="bg-white p-4 rounded-lg border border-slate-200 flex items-center gap-3"><span class="text-xl">🏷️</span><div><h4 class="font-semibold">Project Title</h4><p class="text-sm text-slate-500">A succinct, self-explanatory name.</p></div></div>
-                    <div class="bg-white p-4 rounded-lg border border-slate-200 flex items-center gap-3"><span class="text-xl">📝</span><div><h4 class="font-semibold">Description</h4><p class="text-sm text-slate-500">The what, why, and how of your project.</p></div></div>
-                    <div class="bg-white p-4 rounded-lg border border-slate-200 flex items-center gap-3"><span class="text-xl">📥</span><div><h4 class="font-semibold">Installation</h4><p class="text-sm text-slate-500">Step-by-step setup instructions.</p></div></div>
-                    <div class="bg-white p-4 rounded-lg border border-slate-200 flex items-center gap-3"><span class="text-xl">🚀</span><div><h4 class="font-semibold">Usage</h4><p class="text-sm text-slate-500">Examples and screenshots in action.</p></div></div>
-                    <div class="bg-white p-4 rounded-lg border border-slate-200 flex items-center gap-3"><span class="text-xl">🙏</span><div><h4 class="font-semibold">Credits</h4><p class="text-sm text-slate-500">Acknowledge collaborators and assets.</p></div></div>
-                    <div class="bg-white p-4 rounded-lg border border-slate-200 flex items-center gap-3"><span class="text-xl">📜</span><div><h4 class="font-semibold">License</h4><p class="text-sm text-slate-500">Define permissions for others.</p></div></div>
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700 flex items-center gap-3 transition-colors duration-500"><span class="text-xl">🏷️</span><div><h4 class="font-semibold">Project Title</h4><p class="text-sm text-slate-400 transition-colors duration-500">A succinct, self-explanatory name.</p></div></div>
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700 flex items-center gap-3 transition-colors duration-500"><span class="text-xl">📝</span><div><h4 class="font-semibold">Description</h4><p class="text-sm text-slate-400 transition-colors duration-500">The what, why, and how of your project.</p></div></div>
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700 flex items-center gap-3 transition-colors duration-500"><span class="text-xl">📥</span><div><h4 class="font-semibold">Installation</h4><p class="text-sm text-slate-400 transition-colors duration-500">Step-by-step setup instructions.</p></div></div>
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700 flex items-center gap-3 transition-colors duration-500"><span class="text-xl">🚀</span><div><h4 class="font-semibold">Usage</h4><p class="text-sm text-slate-400 transition-colors duration-500">Examples and screenshots in action.</p></div></div>
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700 flex items-center gap-3 transition-colors duration-500"><span class="text-xl">🙏</span><div><h4 class="font-semibold">Credits</h4><p class="text-sm text-slate-400 transition-colors duration-500">Acknowledge collaborators and assets.</p></div></div>
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700 flex items-center gap-3 transition-colors duration-500"><span class="text-xl">📜</span><div><h4 class="font-semibold">License</h4><p class="text-sm text-slate-400 transition-colors duration-500">Define permissions for others.</p></div></div>
                 </div>
             </div>
 
-            <div class="interactive-box p-6 md:p-8">
-                <h3 class="text-2xl font-semibold text-slate-700 text-center mb-6">Interactive Markdown Mastery</h3>
-                <p class="text-center text-slate-500 mb-8 max-w-2xl mx-auto">This section provides a hands-on way to learn Markdown. Click on an element from the list on the left to see its syntax and a live preview. This interactive approach helps solidify understanding far better than just reading a table.</p>
+            <div class="interactive-box p-6 md:p-8 rounded-lg">
+                <h3 class="text-2xl font-semibold text-slate-200 transition-colors duration-500 text-center mb-6">Interactive Markdown Mastery</h3>
+                <p class="text-center text-slate-400 transition-colors duration-500 mb-8 max-w-2xl mx-auto">This section provides a hands-on way to learn Markdown. Click on an element from the list on the left to see its syntax and a live preview. This interactive approach helps solidify understanding far better than just reading a table.</p>
                 <div class="grid md:grid-cols-3 gap-8">
                     <div class="md:col-span-1">
-                        <ul id="markdown-list" class="space-y-1">
+                        <ul id="markdown-list" class="space-y-1 text-slate-400 transition-colors duration-500">
                             <li class="interactive-list-item" data-md="heading">Headings</li>
                             <li class="interactive-list-item" data-md="emphasis">Emphasis (Bold/Italic)</li>
                             <li class="interactive-list-item" data-md="blockquote">Blockquotes</li>
@@ -201,12 +281,12 @@
                     </div>
                     <div class="md:col-span-2 space-y-4">
                         <div>
-                            <h4 class="font-semibold text-slate-600 mb-2">Markdown Syntax:</h4>
+                            <h4 class="font-semibold text-slate-300 transition-colors duration-500 mb-2">Markdown Syntax:</h4>
                             <pre id="markdown-syntax" class="text-sm"><code>Click an item to see its syntax.</code></pre>
                         </div>
                         <div>
-                            <h4 class="font-semibold text-slate-600 mb-2">Live Preview:</h4>
-                            <div id="markdown-preview" class="p-4 border border-slate-200 rounded-lg bg-slate-50 min-h-[150px] custom-prose">
+                            <h4 class="font-semibold text-slate-300 transition-colors duration-500 mb-2">Live Preview:</h4>
+                            <div id="markdown-preview" class="p-4 border border-slate-700 rounded-lg bg-slate-800 transition-colors duration-500 min-h-[150px] custom-prose">
                                 <p>Click an item to see its rendered output.</p>
                             </div>
                         </div>
@@ -217,68 +297,113 @@
 
         <section id="personalize" class="content-section">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-slate-800 mb-2">Personalize & Showcase</h2>
-                <p class="text-lg text-slate-500 max-w-3xl mx-auto">Transform your profile from a list of projects into a compelling professional story that highlights your unique skills and personality.</p>
+                <h2 class="text-3xl font-bold text-slate-100 transition-colors duration-500 mb-2">Personalize & Showcase</h2>
+                <p class="text-lg text-slate-400 transition-colors duration-500 max-w-3xl mx-auto">Transform your profile from a list of projects into a compelling professional story that highlights your unique skills and personality.</p>
             </div>
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="interactive-box p-6">
-                    <h3 class="font-bold text-lg text-slate-800 mb-2">👤 Craft Your "About Me"</h3>
-                    <p class="text-slate-600">Start with a concise intro. State your role, programming interests, and professional goals (e.g., seeking opportunities). Authenticity is key—be genuine and let your personality show.</p>
+                <div class="interactive-box p-6 rounded-lg">
+                    <h3 class="font-bold text-lg text-slate-100 transition-colors duration-500 mb-2">👤 Craft Your "About Me"</h3>
+                    <p class="text-slate-400 transition-colors duration-500">Start with a concise intro. State your role, programming interests, and professional goals (e.g., seeking opportunities). Authenticity is key—be genuine and let your personality show.</p>
                 </div>
-                <div class="interactive-box p-6">
-                    <h3 class="font-bold text-lg text-slate-800 mb-2">✨ Showcase with Impact</h3>
-                    <p class="text-slate-600">Focus on quality over quantity. Highlight projects you're proud of. Explain the *why*—the problem you solved, the challenges you overcame, and your technology choices. This demonstrates critical thinking.</p>
+                <div class="interactive-box p-6 rounded-lg">
+                    <h3 class="font-bold text-lg text-slate-100 transition-colors duration-500 mb-2">✨ Showcase with Impact</h3>
+                    <p class="text-slate-400 transition-colors duration-500">Focus on quality over quantity. Highlight projects you're proud of. Explain the *why*—the problem you solved, the challenges you overcame, and your technology choices. This demonstrates critical thinking.</p>
                 </div>
-                <div class="interactive-box p-6">
-                    <h3 class="font-bold text-lg text-slate-800 mb-2">🎨 Visualize Your Skills</h3>
-                    <p class="text-slate-600">Go beyond a simple list. Use icons (e.g., from DevIcons) to create a visually engaging and scannable map of your technical competencies. This makes your skills instantly recognizable.</p>
+                <div class="interactive-box p-6 rounded-lg">
+                    <h3 class="font-bold text-lg text-slate-100 transition-colors duration-500 mb-2">🎨 Visualize Your Skills</h3>
+                    <p class="text-slate-400 transition-colors duration-500">Go beyond a simple list. Use icons (e.g., from DevIcons) to create a visually engaging and scannable map of your technical competencies. This makes your skills instantly recognizable.</p>
                 </div>
-                <div class="interactive-box p-6">
-                    <h3 class="font-bold text-lg text-slate-800 mb-2">🖼️ The Power of Visuals</h3>
-                    <p class="text-slate-600">Use screenshots, animated GIFs, or even short videos to demonstrate your applications in action. A visually appealing banner can also dramatically improve your profile's aesthetic.</p>
+                <div class="interactive-box p-6 rounded-lg">
+                    <h3 class="font-bold text-lg text-slate-100 transition-colors duration-500 mb-2">🖼️ The Power of Visuals</h3>
+                    <p class="text-slate-400 transition-colors duration-500">Use screenshots, animated GIFs, or even short videos to demonstrate your applications in action. A visually appealing banner can also dramatically improve your profile's aesthetic.</p>
                 </div>
-                <div class="interactive-box p-6">
-                    <h3 class="font-bold text-lg text-slate-800 mb-2">🤝 Show Community Engagement</h3>
-                    <p class="text-slate-600">Include a project roadmap, contribution guidelines, or a link to a bug tracker. This signals transparency, a forward-thinking approach, and openness to collaboration.</p>
+                <div class="interactive-box p-6 rounded-lg">
+                    <h3 class="font-bold text-lg text-slate-100 transition-colors duration-500 mb-2">🤝 Show Community Engagement</h3>
+                    <p class="text-slate-400 transition-colors duration-500">Include a project roadmap, contribution guidelines, or a link to a bug tracker. This signals transparency, a forward-thinking approach, and openness to collaboration.</p>
                 </div>
-                <div class="interactive-box p-6 bg-teal-50 border-teal-200">
-                    <h3 class="font-bold text-lg text-teal-800 mb-2">🚀 Pro Tip: The Narrative</h3>
-                    <p class="text-teal-700">Weave these elements into a story. Your "About Me" introduces the character (you), your skills are your tools, and your projects are the adventures you've been on. </p>
+                <div class="interactive-box p-6 bg-slate-700 border-teal-700 rounded-lg transition-colors duration-500">
+                    <h3 class="font-bold text-lg text-teal-200 transition-colors duration-500 mb-2">🚀 Pro Tip: The Narrative</h3>
+                    <p class="text-teal-300 transition-colors duration-500">Weave these elements into a story. Your "About Me" introduces the character (you), your skills are your tools, and your projects are the adventures you've been on. </p>
                 </div>
             </div>
         </section>
 
         <section id="dynamic" class="content-section">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-slate-800 mb-2">Go Dynamic</h2>
-                <p class="text-lg text-slate-500 max-w-3xl mx-auto">Bring your profile to life with automated, self-updating elements that provide verifiable proof of your activity and engagement.</p>
+                <h2 class="text-3xl font-bold text-slate-100 transition-colors duration-500 mb-2">Go Dynamic</h2>
+                <p class="text-lg text-slate-400 transition-colors duration-500 max-w-3xl mx-auto">Bring your profile to life with automated, self-updating elements that provide verifiable proof of your activity and engagement.</p>
             </div>
-            <div class="interactive-box p-6 md:p-8">
-                <h3 class="text-2xl font-semibold text-slate-700 text-center mb-6">Dynamic Element Simulator</h3>
-                <p class="text-center text-slate-500 mb-8 max-w-3xl mx-auto">This tool simulates how you can embed dynamic, auto-updating statistics and graphs into your README. Select a tool from the dropdown to see a visual example and the Markdown code required to implement it. This demonstrates the power of tools like GitHub Actions and various stat trackers.</p>
+            <div class="interactive-box p-6 md:p-8 rounded-lg mb-8">
+                <h3 class="text-2xl font-semibold text-slate-200 transition-colors duration-500 text-center mb-6">Dynamic Element Simulator</h3>
+                <p class="text-center text-slate-400 transition-colors duration-500 mb-8 max-w-3xl mx-auto">This tool simulates how you can embed dynamic, auto-updating statistics and graphs into your README. Select a tool from the dropdown to see a visual example and the Markdown code required to implement it. This demonstrates the power of tools like GitHub Actions and various stat trackers.</p>
                 <div class="max-w-md mx-auto mb-6">
-                    <label for="dynamic-selector" class="block text-sm font-medium text-slate-700 mb-1">Select a Dynamic Element:</label>
-                    <select id="dynamic-selector" class="w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                    <label for="dynamic-selector" class="block text-sm font-medium text-slate-300 transition-colors duration-500 mb-1">Select a Dynamic Element:</label>
+                    <select id="dynamic-selector" class="w-full p-2 border border-slate-600 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 bg-slate-700 text-slate-200 transition-colors duration-500">
                         <option value="stats">GitHub Stats Card</option>
                         <option value="languages">Top Languages Card</option>
                         <option value="graph">Activity Graph</option>
                         <option value="wakatime">WakaTime Stats</option>
+                        <option value="typing">Typing Animation</option>
+                        <option value="spotify">Spotify Now Playing</option>
+                        <option value="steam">Steam Gaming Stats</option>
+                        <option value="visitors">Profile Visitor Counter</option>
                     </select>
                 </div>
                 <div class="text-center">
-                    <img id="dynamic-preview-image" src="https://via.placeholder.com/450x180/f1f5f9/475569?text=Select+an+element+to+preview" alt="Dynamic element preview" class="mx-auto mb-4 rounded-lg bg-slate-100 h-[180px] object-contain">
+                    <img id="dynamic-preview-image" src="https://via.placeholder.com/450x180/f1f5f9/475569?text=Select+an+element+to+preview" alt="Dynamic element preview" class="mx-auto mb-4 rounded-lg bg-slate-800 transition-colors duration-500 h-[180px] object-contain">
                     <div>
-                        <h4 class="font-semibold text-slate-600 mb-2">Markdown Code:</h4>
+                        <h4 class="font-semibold text-slate-300 transition-colors duration-500 mb-2">Markdown Code:</h4>
                         <pre id="dynamic-code-snippet" class="text-sm text-left"><code>Select an element to see its code.</code></pre>
                     </div>
+                </div>
+            </div>
+
+            <div class="interactive-box p-6 md:p-8 rounded-lg">
+                <h3 class="text-2xl font-semibold text-slate-200 transition-colors duration-500 text-center mb-6">Automating Content with GitHub Actions</h3>
+                <p class="text-center text-slate-400 transition-colors duration-500 mb-8 max-w-3xl mx-auto">Beyond simple stats, GitHub Actions can automate more complex content updates, like pulling your latest blog posts or even templating sections of your README. This keeps your profile fresh without manual effort.</p>
+                <div class="custom-prose max-w-2xl mx-auto">
+                    <h4>Latest Blog Posts (RSS Feed)</h4>
+                    <p>You can use a GitHub Action to automatically fetch and display your latest blog posts from an RSS feed directly in your README. This is a powerful way to showcase your recent thoughts and writing without manual updates.</p>
+                    <h4 class="font-semibold text-slate-300 transition-colors duration-500 mb-2">Example Workflow Snippet:</h4>
+                    <pre class="text-sm"><code>name: Latest blog post workflow
+on:
+  schedule:
+    - cron: '0 * * * *' # Runs every hour
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  update-readme-with-blog:
+    name: Update README with latest blog posts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gautamkrishnar/blog-post-workflow@v1
+        with:
+          feed_list: "https://dev.to/feed/YOUR_USERNAME"
+          max_post_count: 5
+          comment_tag_name: "BLOG-POST-LIST"
+</code></pre>
+                    <p class="mt-4">You would then add a comment block in your README like this:</p>
+                    <pre class="text-sm"><code>&lt;!-- BLOG-POST-LIST:START --&gt;
+&lt;!-- BLOG-POST-LIST:END --&gt;</code></pre>
+                    <p class="mt-4">The action will automatically replace the content between the `START` and `END` comments with your latest posts.</p>
+
+                    <h4 class="mt-8">Advanced Templating with Dynamic Readme Action</h4>
+                    <p>For even more control, actions like "Dynamic Readme GitHub Action" allow you to use variables and include files from other repositories, enabling complex templating for common sections like sponsor links or contact information across multiple READMEs.</p>
+                    <h4 class="font-semibold text-slate-300 transition-colors duration-500 mb-2">Example Syntax:</h4>
+                    <pre class="text-sm"><code>Hello, I'm ${{ env.REPOSITORY_OWNER }}!
+This is my repository: ${{ env.REPOSITORY_FULL_NAME }}
+
+</code></pre>
                 </div>
             </div>
         </section>
         
         <section id="design" class="content-section">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-slate-800 mb-2">Design & Style</h2>
-                <p class="text-lg text-slate-500 max-w-3xl mx-auto">A well-designed README is readable, scannable, and visually appealing. Good design enhances your content and leaves a professional impression.</p>
+                <h2 class="text-3xl font-bold text-slate-100 transition-colors duration-500 mb-2">Design & Style</h2>
+                <p class="text-lg text-slate-400 transition-colors duration-500 max-w-3xl mx-auto">A well-designed README is readable, scannable, and visually appealing. Good design enhances your content and leaves a professional impression.</p>
             </div>
             <div class="grid lg:grid-cols-5 gap-8">
                 <div class="lg:col-span-3 custom-prose">
@@ -290,31 +415,44 @@
                     
                     <h3>Visual Harmony</h3>
                     <p>Maintain a consistent color palette and design style. Strategic use of whitespace separates content and gives it room to breathe. Judicious use of emojis can add personality and convey tone, but avoid overuse to maintain professionalism.</p>
+
+                    <div class="interactive-box p-6 mt-8 bg-slate-700 border-teal-700 rounded-lg transition-colors duration-500">
+                        <h4 class="font-semibold text-teal-200 transition-colors duration-500 mb-2">Interactive: Collapsible Section</h4>
+                        <p class="text-teal-300 transition-colors duration-500 text-sm mb-4">Click the summary below to expand or collapse this section. Great for keeping long READMEs tidy!</p>
+                        <details class="bg-slate-800 p-4 rounded-md border border-teal-600 transition-colors duration-500">
+                            <summary class="font-semibold text-slate-200 cursor-pointer hover:text-teal-400 transition-colors duration-500">Click to reveal more details!</summary>
+                            <div class="mt-2 text-slate-400 transition-colors duration-500">
+                                <p>This is content hidden inside a collapsible section. You can put tables, code blocks, or any other Markdown content here to keep your README clean and organized.</p>
+                                <p>It uses the HTML <code>&lt;details&gt;</code> and <code>&lt;summary&gt;</code> tags.</p>
+                            </div>
+                        </details>
+                    </div>
                 </div>
                 <div class="lg:col-span-2">
-                    <div class="interactive-box p-6">
-                        <h3 class="text-xl font-semibold text-slate-700 mb-4">Interactive Badge Builder</h3>
-                        <p class="text-slate-500 mb-6 text-sm">Badges provide quick, visual validation of your skills and project status. Use this builder to create custom badges from Shields.io.</p>
+                    <div class="interactive-box p-6 rounded-lg">
+                        <h3 class="text-xl font-semibold text-slate-200 transition-colors duration-500 mb-4">Interactive Badge Builder</h3>
+                        <p class="text-slate-400 transition-colors duration-500 mb-2 text-sm">Badges provide quick, visual validation of your skills and project status. Use this builder to create custom badges from Shields.io. Experiment with different labels and messages to create badges for any purpose, such as for your project's license or version number.</p>
+                        <p class="text-slate-400 transition-colors duration-500 mb-6 text-sm">You can also visit the official <a href="https://shields.io" target="_blank" class="text-teal-400 hover:text-teal-300 underline font-semibold">Shields.io website</a> to find more styles, a vast library of icons, and more advanced customization options.</p>
                         <div class="space-y-4">
                             <div>
-                                <label for="badge-label" class="block text-sm font-medium text-slate-600">Label</label>
-                                <input type="text" id="badge-label" value="build" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500">
+                                <label for="badge-label" class="block text-sm font-medium text-slate-300 transition-colors duration-500">Label</label>
+                                <input type="text" id="badge-label" value="build" class="mt-1 block w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 text-slate-200 transition-colors duration-500">
                             </div>
                             <div>
-                                <label for="badge-message" class="block text-sm font-medium text-slate-600">Message</label>
-                                <input type="text" id="badge-message" value="passing" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500">
+                                <label for="badge-message" class="block text-sm font-medium text-slate-300 transition-colors duration-500">Message</label>
+                                <input type="text" id="badge-message" value="passing" class="mt-1 block w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 text-slate-200 transition-colors duration-500">
                             </div>
                             <div>
-                                <label for="badge-color" class="block text-sm font-medium text-slate-600">Color</label>
-                                <input type="text" id="badge-color" value="2dd4bf" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500">
+                                <label for="badge-color" class="block text-sm font-medium text-slate-300 transition-colors duration-500">Color (Hex or Name)</label>
+                                <input type="text" id="badge-color" value="2dd4bf" class="mt-1 block w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 text-slate-200 transition-colors duration-500">
                             </div>
                         </div>
                         <div class="mt-6">
-                             <h4 class="font-semibold text-slate-600 mb-2">Badge Preview:</h4>
-                             <div class="bg-slate-100 p-4 rounded-lg text-center">
+                             <h4 class="font-semibold text-slate-300 transition-colors duration-500 mb-2">Badge Preview:</h4>
+                             <div class="bg-slate-800 p-4 rounded-lg text-center transition-colors duration-500">
                                 <img id="badge-preview" src="https://img.shields.io/badge/build-passing-2dd4bf" alt="Badge preview" class="mx-auto">
                              </div>
-                             <h4 class="font-semibold text-slate-600 mb-2 mt-4">Markdown:</h4>
+                             <h4 class="font-semibold text-slate-300 transition-colors duration-500 mb-2 mt-4">Markdown:</h4>
                              <pre class="text-xs">
 <code id="badge-code">![build](https://img.shields.io/badge/build-passing-2dd4bf)</code></pre>
                         </div>
@@ -323,10 +461,176 @@
             </div>
         </section>
 
+        <section id="generator" class="content-section">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-slate-100 transition-colors duration-500 mb-2">GitHub README Generator</h2>
+                <p class="text-lg text-slate-400 transition-colors duration-500 max-w-3xl mx-auto">Effortlessly create a professional and dynamic GitHub README. Fill in the details below, select your desired sections and dynamic elements, and watch your README come to life!</p>
+            </div>
+
+            <div class="interactive-box p-6 md:p-8 rounded-lg">
+                <form id="readme-generator-form" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                    <div class="md:col-span-2">
+                        <h3 class="form-section-heading">Basic Information</h3>
+                    </div>
+                    <div class="form-group">
+                        <label for="generator-title">Project/Profile Title</label>
+                        <input type="text" id="generator-title" placeholder="e.g., My Awesome Project, John Doe's Profile" class="form-input">
+                    </div>
+                    <div class="form-group md:col-span-2">
+                        <label for="generator-tagline">Project Tagline</label>
+                        <input type="text" id="generator-tagline" placeholder="e.g., A community-driven digital library" class="form-input">
+                    </div>
+                    <div class="form-group md:col-span-2">
+                        <label for="generator-about">Project Overview / Mission</label>
+                        <textarea id="generator-about" rows="3" placeholder="Explain the project in detail. What problem does it solve and who is it for?" class="form-input"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="generator-live-demo">Live Demo URL (Optional)</label>
+                        <input type="url" id="generator-live-demo" placeholder="https://your-live-demo.com" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="generator-repo-url">Repository URL (for cloning)</label>
+                        <input type="url" id="generator-repo-url" placeholder="https://github.com/your-username/your-repo.git" class="form-input">
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <h3 class="form-section-heading">Project Content</h3>
+                    </div>
+                    <div class="form-group md:col-span-2">
+                        <label for="generator-features">Features (one per line)</label>
+                        <textarea id="generator-features" rows="5" placeholder="e.g., Easy access to structured academic content
+Community uploads of useful study material
+Search-friendly design (coming soon)" class="form-input"></textarea>
+                    </div>
+                    <div class="form-group md:col-span-2">
+                        <label for="generator-tech-stack">Tech Stack (one per line, specify type if needed)</label>
+                        <textarea id="generator-tech-stack" rows="5" placeholder="e.g., Frontend: HTML5, CSS3, JavaScript
+Backend & Hosting: Firebase
+Media Integration: YouTube Embeds" class="form-input"></textarea>
+                    </div>
+                    <div class="form-group md:col-span-2">
+                        <label for="generator-getting-started">Getting Started Instructions</label>
+                        <textarea id="generator-getting-started" rows="5" placeholder="e.g., 1. Clone the Repository
+```sh
+git clone [https://github.com/your-username/your-repo.git](https://github.com/your-username/your-repo.git)
+cd your-repo
+```" class="form-input"></textarea>
+                    </div>
+                    <div class="form-group md:col-span-2">
+                        <label for="generator-future-plans">Future Plans (one per line)</label>
+                        <textarea id="generator-future-plans" rows="5" placeholder="e.g., Smart search and filter by semester/subject
+Trending & most-downloaded materials
+AI-based content tagging" class="form-input"></textarea>
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <h3 class="form-section-heading">Dynamic Content & Badges</h3>
+                    </div>
+                    <div class="form-group">
+                        <label for="generator-github-username">GitHub Username</label>
+                        <input type="text" id="generator-github-username" placeholder="Your GitHub username" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="generator-wakatime-username">WakaTime Username (Optional)</label>
+                        <input type="text" id="generator-wakatime-username" placeholder="Your WakaTime username" class="form-input">
+                    </div>
+                    
+                    <div class="form-group md:col-span-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="include-stats-card"> GitHub Stats Card
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="include-languages-card"> Top Languages Card
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="include-activity-graph"> Activity Graph
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="include-typing-animation"> Typing Animation
+                        </label>
+                        <div class="form-group">
+                            <label for="generator-typing-lines" class="text-sm font-medium text-slate-300">Typing Animation Lines (semicolon-separated)</label>
+                            <input type="text" id="generator-typing-lines" placeholder="Hello;I am a dev;Welcome!" class="form-input mt-1" disabled>
+                        </div>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="include-spotify"> Spotify Now Playing
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="include-steam"> Steam Gaming Stats
+                        </label>
+                        <div class="form-group">
+                            <label for="generator-steam-id" class="text-sm font-medium text-slate-300">Steam ID (Optional)</label>
+                            <input type="text" id="generator-steam-id" placeholder="Your Steam ID" class="form-input mt-1" disabled>
+                        </div>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="include-visitors"> Profile Visitor Counter
+                        </label>
+                    </div>
+                    
+                    <div class="md:col-span-2">
+                        <h3 class="form-section-heading">Optional Sections</h3>
+                    </div>
+                    <div class="form-group md:col-span-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="include-toc"> Table of Contents
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="include-credits"> Credits & Acknowledgments
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="include-contributing"> Contributing Guidelines
+                        </label>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="include-license"> License
+                            </label>
+                            <select id="generator-license-type" class="form-input mt-2" disabled>
+                                <option value="MIT">MIT License</option>
+                                <option value="Apache-2.0">Apache 2.0 License</option>
+                                <option value="GPL-3.0">GPL 3.0 License</option>
+                                <option value="Unlicense">Unlicense</option>
+                            </select>
+                        </div>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="include-tests"> Tests
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="include-issues"> Known Issues / Bugs
+                        </label>
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <h3 class="form-section-heading">Contact Information</h3>
+                    </div>
+                    <div class="form-group">
+                        <label for="generator-linkedin">LinkedIn URL</label>
+                        <input type="url" id="generator-linkedin" placeholder="https://linkedin.com/in/yourprofile" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="generator-twitter">Twitter/X URL</label>
+                        <input type="url" id="generator-twitter" placeholder="https://twitter.com/yourhandle" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="generator-email">Email Address</label>
+                        <input type="email" id="generator-email" placeholder="your.email@example.com" class="form-input">
+                    </div>
+                </form>
+
+                <div class="generated-output-box">
+                    <h3 class="text-xl font-semibold text-slate-200 mb-4">Generated README Markdown</h3>
+                    <textarea id="generated-readme-output" readonly></textarea>
+                    <div class="flex justify-end gap-4 mt-4">
+                        <button id="copy-readme-btn" class="btn-primary">Copy to Clipboard</button>
+                        <button id="download-readme-btn" class="btn-primary">Download README.md</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="strategy" class="content-section">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-slate-800 mb-2">Strategy & Common Pitfalls</h2>
-                <p class="text-lg text-slate-500 max-w-3xl mx-auto">Creating a great README requires a strategic approach to audience, content, and maintenance, while consciously avoiding common mistakes.</p>
+                <h2 class="text-3xl font-bold text-slate-100 transition-colors duration-500 mb-2">Strategy & Common Pitfalls</h2>
+                <p class="text-lg text-slate-400 transition-colors duration-500 max-w-3xl mx-auto">Creating a great README requires a strategic approach to audience, content, and maintenance, while consciously avoiding common mistakes.</p>
             </div>
             <div class="grid md:grid-cols-2 gap-8">
                 <div class="custom-prose">
@@ -340,17 +644,17 @@
                     <p>Treat your README as a living document. Update it as you complete new projects, learn new skills, or reach new milestones. A README that reflects your current journey signals adaptability and a commitment to your craft.</p>
                 </div>
                 <div class="space-y-6">
-                    <div class="interactive-box p-6 border-l-4 border-red-400">
-                        <h3 class="font-bold text-lg text-slate-800 mb-2">❌ Pitfall: The Empty README</h3>
-                        <p class="text-slate-600">The most common mistake is having no README or a very sparse one. This immediately signals a lack of professionalism and care for your work.</p>
+                    <div class="interactive-box p-6 border-l-4 border-red-400 rounded-lg">
+                        <h3 class="font-bold text-lg text-slate-100 transition-colors duration-500 mb-2">❌ Pitfall: The Empty README</h3>
+                        <p class="text-slate-400 transition-colors duration-500">The most common mistake is having no README or a very sparse one. This immediately signals a lack of professionalism and care for your work.</p>
                     </div>
-                    <div class="interactive-box p-6 border-l-4 border-red-400">
-                        <h3 class="font-bold text-lg text-slate-800 mb-2">❌ Pitfall: The "To-Do List" Project</h3>
-                        <p class="text-slate-600">Avoid showcasing trivial projects that don't demonstrate unique skills or problem-solving. Recruiters have seen thousands of basic tutorials and to-do list apps.</p>
+                    <div class="interactive-box p-6 border-l-4 border-red-400 rounded-lg">
+                        <h3 class="font-bold text-lg text-slate-100 transition-colors duration-500 mb-2">❌ Pitfall: The "To-Do List" Project</h3>
+                        <p class="text-slate-400 transition-colors duration-500">Avoid showcasing trivial projects that don't demonstrate unique skills or problem-solving. Recruiters have seen thousands of basic tutorials and to-do list apps.</p>
                     </div>
-                    <div class="interactive-box p-6 border-l-4 border-red-400">
-                        <h3 class="font-bold text-lg text-slate-800 mb-2">❌ Pitfall: Over-relying on GitHub</h3>
-                        <p class="text-slate-600">Your GitHub profile is a powerful tool, but it won't land you a job on its own. It's a component of your professional presence that must be supported by strong interview performance and soft skills.</p>
+                    <div class="interactive-box p-6 border-l-4 border-red-400 rounded-lg">
+                        <h3 class="font-bold text-lg text-slate-100 transition-colors duration-500 mb-2">❌ Pitfall: Over-relying on GitHub</h3>
+                        <p class="text-slate-400 transition-colors duration-500">Your GitHub profile is a powerful tool, but it won't land you a job on its own. It's a component of your professional presence that must be supported by strong interview performance and soft skills.</p>
                     </div>
                 </div>
             </div>
@@ -358,43 +662,44 @@
 
         <section id="toolkit" class="content-section">
              <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-slate-800 mb-2">The Ultimate Toolkit</h2>
-                <p class="text-lg text-slate-500 max-w-3xl mx-auto">Leverage these resources to find inspiration, streamline creation, and learn best practices for maintaining a cutting-edge GitHub presence.</p>
+                <h2 class="text-3xl font-bold text-slate-100 transition-colors duration-500 mb-2">The Ultimate Toolkit</h2>
+                <p class="text-lg text-slate-400 transition-colors duration-500 max-w-3xl mx-auto">Leverage these resources to find inspiration, streamline creation, and learn best practices for maintaining a cutting-edge GitHub presence.</p>
             </div>
             <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="interactive-box p-6">
-                    <h3 class="font-bold text-lg text-slate-800 mb-3">🎨 Inspiration Lists</h3>
-                    <p class="text-slate-600 mb-4">Explore curated lists of awesome profiles to spark new ideas and see what's possible.</p>
-                    <a href="https://github.com/abhisheknaiidu/awesome-github-profile-readme" target="_blank" class="font-semibold text-teal-600 hover:text-teal-700">Awesome Profile READMEs &rarr;</a>
+                <div class="interactive-box p-6 rounded-lg">
+                    <h3 class="font-bold text-lg text-slate-100 transition-colors duration-500 mb-3">🎨 Inspiration Lists</h3>
+                    <p class="text-slate-400 transition-colors duration-500 mb-4">Explore curated lists of awesome profiles to spark new ideas and see what's possible.</p>
+                    <a href="https://github.com/abhisheknaiidu/awesome-github-profile-readme" target="_blank" class="font-semibold text-teal-400 hover:text-teal-300">Awesome Profile READMEs &rarr;</a>
                 </div>
-                <div class="interactive-box p-6">
-                    <h3 class="font-bold text-lg text-slate-800 mb-3">🛠️ README Generators</h3>
-                    <p class="text-slate-600 mb-4">Use GUI-based tools to quickly generate the Markdown for your profile, including sections, stats, and badges.</p>
-                    <a href="https://rahuldkjain.github.io/gh-profile-readme-generator/" target="_blank" class="font-semibold text-teal-600 hover:text-teal-700">Profile README Generator &rarr;</a><br>
-                    <a href="https://readme.so/" target="_blank" class="font-semibold text-teal-600 hover:text-teal-700">readme.so Editor &rarr;</a>
+                <div class="interactive-box p-6 rounded-lg">
+                    <h3 class="font-bold text-lg text-slate-100 transition-colors duration-500 mb-3">🛠️ README Generators</h3>
+                    <p class="text-slate-400 transition-colors duration-500 mb-4">Use GUI-based tools to quickly generate the Markdown for your profile, including sections, stats, and badges.</p>
+                    <a href="https://rahuldkjain.github.io/gh-profile-readme-generator/" target="_blank" class="font-semibold text-teal-400 hover:text-teal-300">Profile README Generator &rarr;</a><br>
+                    <a href="https://readme.so/" target="_blank" class="font-semibold text-teal-400 hover:text-teal-300">readme.so Editor &rarr;</a>
                 </div>
-                <div class="interactive-box p-6">
-                    <h3 class="font-bold text-lg text-slate-800 mb-3">🛡️ Badge & Icon Libraries</h3>
-                    <p class="text-slate-600 mb-4">Create custom status badges and find logos for virtually any technology you use.</p>
-                    <a href="https://shields.io/" target="_blank" class="font-semibold text-teal-600 hover:text-teal-700">Shields.io &rarr;</a><br>
-                    <a href="https://simpleicons.org/" target="_blank" class="font-semibold text-teal-600 hover:text-teal-700">Simple Icons &rarr;</a>
+                <div class="interactive-box p-6 rounded-lg">
+                    <h3 class="font-bold text-lg text-slate-100 transition-colors duration-500 mb-3">🛡️ Badge & Icon Libraries</h3>
+                    <p class="text-slate-400 transition-colors duration-500 mb-4">Create custom status badges and find logos for virtually any technology you use.</p>
+                    <a href="https://shields.io/" target="_blank" class="font-semibold text-teal-400 hover:text-teal-300">Shields.io &rarr;</a><br>
+                    <a href="https://simpleicons.org/" target="_blank" class="font-semibold text-teal-400 hover:text-teal-300">Simple Icons &rarr;</a>
                 </div>
-                <div class="interactive-box p-6">
-                    <h3 class="font-bold text-lg text-slate-800 mb-3">📊 Stats & Activity Trackers</h3>
-                    <p class="text-slate-600 mb-4">Integrate dynamic, real-time statistics about your coding activity and GitHub contributions.</p>
-                    <a href="https://github.com/anuraghazra/github-readme-stats" target="_blank" class="font-semibold text-teal-600 hover:text-teal-700">GitHub Readme Stats &rarr;</a><br>
-                    <a href="https://wakatime.com/" target="_blank" class="font-semibold text-teal-600 hover:text-teal-700">WakaTime &rarr;</a>
+                <div class="interactive-box p-6 rounded-lg">
+                    <h3 class="font-bold text-lg text-slate-100 transition-colors duration-500 mb-3">📊 Stats & Activity Trackers</h3>
+                    <p class="text-slate-400 transition-colors duration-500 mb-4">Integrate dynamic, real-time statistics about your coding activity and GitHub contributions.</p>
+                    <a href="https://github.com/anuraghazra/github-readme-stats" target="_blank" class="font-semibold text-teal-400 hover:text-teal-300">GitHub Readme Stats &rarr;</a><br>
+                    <a href="https://wakatime.com/" target="_blank" class="font-semibold text-teal-400 hover:text-teal-300">WakaTime &rarr;</a><br>
+                    <a href="https://github.com/Ashutosh00710/github-readme-activity-graph" target="_blank" class="font-semibold text-teal-400 hover:text-teal-300">Activity Graph &rarr;</a>
                 </div>
-                <div class="interactive-box p-6">
-                    <h3 class="font-bold text-lg text-slate-800 mb-3">📚 Learning Resources</h3>
-                    <p class="text-slate-600 mb-4">Dive deeper into Markdown, documentation best practices, and open-source licensing.</p>
-                    <a href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax" target="_blank" class="font-semibold text-teal-600 hover:text-teal-700">GitHub Markdown Guide &rarr;</a><br>
-                    <a href="https://choosealicense.com/" target="_blank" class="font-semibold text-teal-600 hover:text-teal-700">Choose a License &rarr;</a>
+                <div class="interactive-box p-6 rounded-lg">
+                    <h3 class="font-bold text-lg text-slate-100 transition-colors duration-500 mb-3">📚 Learning Resources</h3>
+                    <p class="text-slate-400 transition-colors duration-500 mb-4">Dive deeper into Markdown, documentation best practices, and open-source licensing.</p>
+                    <a href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax" target="_blank" class="font-semibold text-teal-400 hover:text-teal-300">GitHub Markdown Guide &rarr;</a><br>
+                    <a href="https://choosealicense.com/" target="_blank" class="font-semibold text-teal-400 hover:text-teal-300">Choose a License &rarr;</a>
                 </div>
-                 <div class="interactive-box p-6">
-                    <h3 class="font-bold text-lg text-slate-800 mb-3">💬 Community Platforms</h3>
-                    <p class="text-slate-600 mb-4">Join discussions, ask for feedback, and stay up-to-date with the latest trends and tools.</p>
-                    <a href="https://www.reddit.com/r/github/" target="_blank" class="font-semibold text-teal-600 hover:text-teal-700">r/github on Reddit &rarr;</a>
+                 <div class="interactive-box p-6 rounded-lg">
+                    <h3 class="font-bold text-lg text-slate-100 transition-colors duration-500 mb-3">💬 Community Platforms</h3>
+                    <p class="text-slate-400 transition-colors duration-500 mb-4">Join discussions, ask for feedback, and stay up-to-date with the latest trends and tools.</p>
+                    <a href="https://www.reddit.com/r/github/" target="_blank" class="font-semibold text-teal-400 hover:text-teal-300">r/github on Reddit &rarr;</a>
                 </div>
             </div>
         </section>
@@ -465,15 +770,31 @@
                 },
                 languages: {
                     img: 'https://github-readme-stats.vercel.app/api/top-langs/?username=anuraghazra&layout=compact&theme=teal',
-                    code: '![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=YOUR_USERNAME&layout=compact&theme=teal)'
+                    code: '![Top Languages Card](https://github-readme-stats.vercel.app/api/top-langs/?username=YOUR_USERNAME&layout=compact&theme=teal)'
                 },
                 graph: {
-                    img: 'https://github-readme-activity-graph.vercel.app/graph?username=anuraghazra&theme=react-dark&bg_color=1f2937&hide_border=true',
+                    img: 'https://github-readme-activity-graph.vercel.app/graph?username=Ashutosh00710&theme=react-dark&bg_color=1f2937&hide_border=true',
                     code: '![Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=YOUR_USERNAME&theme=react-dark)'
                 },
                 wakatime: {
                     img: 'https://github-readme-stats.vercel.app/api/wakatime?username=anuraghazra&theme=teal',
-                    code: '![WakaTime Stats](https://github-readme-stats.vercel.app/api/wakatime?username=YOUR_USERNAME&theme=teal)'
+                    code: '![WakaTime Stats](https://github-readme-stats.app/api/wakatime?username=YOUR_USERNAME&theme=teal)'
+                },
+                typing: {
+                    img: 'https://readme-typing-svg.demolab.com/?lines=Hello+World!;I+am+a+Developer;Welcome+to+my+profile!&font=monospace&size=20&color=36BCF7&center=true&vCenter=true&width=400&height=50',
+                    code: '![Typing Animation](https://readme-typing-svg.demolab.com/?lines=Your+text+here;Another+line&font=monospace&size=20&color=36BCF7&center=true&vCenter=true&width=400&height=50)'
+                },
+                spotify: {
+                    img: 'https://spotify-playing-now-phi.vercel.app/api/spotify',
+                    code: '![Spotify Now Playing](https://spotify-playing-now-phi.vercel.app/api/spotify)'
+                },
+                steam: {
+                    img: 'https://steam-stats-card.vercel.app/api/steam?steamid=76561198066060000',
+                    code: '![Steam Gaming Stats](https://steam-stats-card.vercel.app/api/steam?steamid=YOUR_STEAM_ID)'
+                },
+                visitors: {
+                    img: 'https://profile-counter.glitch.me/DenverCoder1/count.svg',
+                    code: '![Profile Views](https://profile-counter.glitch.me/YOUR_USERNAME/count.svg)'
                 }
             };
 
@@ -511,6 +832,7 @@
                 [badgeLabel, badgeMessage, badgeColor].forEach(input => {
                     input.addEventListener('input', updateBadge);
                 });
+                updateBadge();
             }
 
             const showSection = (sectionId) => {
@@ -541,9 +863,283 @@
                 }
             });
 
+            // Theme toggle logic
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme === 'dark') {
+                htmlTag.classList.add('dark');
+            } else {
+                htmlTag.classList.remove('dark');
+            }
+
             const initialSection = window.location.hash.substring(1) || 'why';
             showSection(initialSection);
+
+            // README Generator Logic
+            const generatorForm = document.getElementById('readme-generator-form');
+            const generatedOutput = document.getElementById('generated-readme-output');
+            const copyReadmeBtn = document.getElementById('copy-readme-btn');
+            const downloadReadmeBtn = document.getElementById('download-readme-btn');
+
+            const generatorInputs = [
+                'generator-title', 'generator-description', 'generator-about-me',
+                'generator-github-username', 'generator-wakatime-username',
+                'generator-typing-lines', 'generator-steam-id',
+                'generator-linkedin', 'generator-twitter', 'generator-email'
+            ];
+            const generatorCheckboxes = [
+                'include-toc', 'include-installation', 'include-usage', 'include-credits',
+                'include-license', 'include-contributing', 'include-roadmap',
+                'include-tests', 'include-issues',
+                'include-stats-card', 'include-languages-card', 'include-activity-graph',
+                'include-typing-animation', 'include-spotify', 'include-steam', 'include-visitors'
+            ];
+            const generatorSelects = ['generator-license-type'];
+            
+            const newGeneratorInputs = [
+                'generator-title', 'generator-tagline', 'generator-about',
+                'generator-live-demo', 'generator-repo-url',
+                'generator-features', 'generator-tech-stack',
+                'generator-getting-started', 'generator-future-plans',
+                'generator-github-username', 'generator-wakatime-username',
+                'generator-typing-lines', 'generator-steam-id',
+                'generator-linkedin', 'generator-twitter', 'generator-email'
+            ];
+            
+            const newGeneratorCheckboxes = [
+                'include-stats-card', 'include-languages-card', 'include-activity-graph',
+                'include-typing-animation', 'include-spotify', 'include-steam', 'include-visitors',
+                'include-toc', 'include-credits', 'include-contributing', 'include-license',
+                'include-tests', 'include-issues',
+            ];
+            
+            const newGeneratorSelects = ['generator-license-type'];
+
+
+            // Enable/disable related inputs for checkboxes
+            document.getElementById('include-license').addEventListener('change', (e) => {
+                document.getElementById('generator-license-type').disabled = !e.target.checked;
+                generateReadme();
+            });
+            document.getElementById('include-typing-animation').addEventListener('change', (e) => {
+                document.getElementById('generator-typing-lines').disabled = !e.target.checked;
+                generateReadme();
+            });
+            document.getElementById('include-steam').addEventListener('change', (e) => {
+                document.getElementById('generator-steam-id').disabled = !e.target.checked;
+                generateReadme();
+            });
+
+
+            function generateReadme() {
+                let markdown = '';
+
+                const title = document.getElementById('generator-title').value.trim();
+                const tagline = document.getElementById('generator-tagline').value.trim();
+                const about = document.getElementById('generator-about').value.trim();
+                const liveDemoUrl = document.getElementById('generator-live-demo').value.trim();
+                const repoUrl = document.getElementById('generator-repo-url').value.trim();
+                const features = document.getElementById('generator-features').value.trim().split('\n').filter(line => line.trim() !== '');
+                const techStack = document.getElementById('generator-tech-stack').value.trim().split('\n').filter(line => line.trim() !== '');
+                const gettingStarted = document.getElementById('generator-getting-started').value.trim();
+                const futurePlans = document.getElementById('generator-future-plans').value.trim().split('\n').filter(line => line.trim() !== '');
+                const githubUsername = document.getElementById('generator-github-username').value.trim();
+                const wakatimeUsername = document.getElementById('generator-wakatime-username').value.trim();
+                const typingLines = document.getElementById('generator-typing-lines').value.trim();
+                const steamId = document.getElementById('generator-steam-id').value.trim();
+                const linkedin = document.getElementById('generator-linkedin').value.trim();
+                const twitter = document.getElementById('generator-twitter').value.trim();
+                const email = document.getElementById('generator-email').value.trim();
+
+                // Title and Tagline
+                if (title) {
+                    markdown += `# ${title}\n\n`;
+                }
+                if (tagline) {
+                    markdown += `${tagline}\n\n`;
+                }
+
+                // Table of Contents
+                if (document.getElementById('include-toc').checked) {
+                    markdown += `## Table of Contents\n\n- [Project Overview](#project-overview)\n`;
+                    if (features.length > 0) markdown += `- [Features](#features)\n`;
+                    if (techStack.length > 0) markdown += `- [Tech Stack](#tech-stack)\n`;
+                    if (gettingStarted) markdown += `- [Getting Started](#getting-started)\n`;
+                    if (liveDemoUrl) markdown += `- [Live Demo](#live-demo)\n`;
+                    if (futurePlans.length > 0) markdown += `- [Future Plans](#future-plans)\n`;
+                    if (document.getElementById('include-stats-card').checked || document.getElementById('include-languages-card').checked || document.getElementById('include-activity-graph').checked || document.getElementById('include-typing-animation').checked || document.getElementById('include-spotify').checked || document.getElementById('include-steam').checked || document.getElementById('include-visitors').checked) {
+                        markdown += `- [My GitHub Stats](#my-github-stats)\n`;
+                    }
+                    if (document.getElementById('include-credits').checked) markdown += `- [Credits](#credits)\n`;
+                    if (document.getElementById('include-contributing').checked) markdown += `- [Contributing](#contributing)\n`;
+                    if (document.getElementById('include-license').checked) markdown += `- [License](#license)\n`;
+                    if (document.getElementById('include-tests').checked) markdown += `- [Tests](#tests)\n`;
+                    if (document.getElementById('include-issues').checked) markdown += `- [Known Issues](#known-issues)\n`;
+                    if (linkedin || twitter || email) {
+                        markdown += `- [Contact](#contact)\n`;
+                    }
+                    markdown += `\n`;
+                }
+
+                // Project Overview
+                if (about) {
+                    markdown += `## Project Overview\n\n${about}\n\n`;
+                }
+
+                // Features
+                if (features.length > 0) {
+                    markdown += `## ✨ Features\n\n`;
+                    features.forEach(feature => {
+                        markdown += `- ${feature.trim()}\n`;
+                    });
+                    markdown += `\n`;
+                }
+
+                // Tech Stack
+                if (techStack.length > 0) {
+                    markdown += `## 🛠 Tech Stack\n\n`;
+                    techStack.forEach(tech => {
+                        markdown += `- ${tech.trim()}\n`;
+                    });
+                    markdown += `\n`;
+                }
+                
+                // Live Demo
+                if (liveDemoUrl) {
+                    markdown += `## 🌐 Live Demo\n\n🔗 [Visit Live Demo](${liveDemoUrl})\n\n`;
+                }
+
+                // Getting Started
+                if (gettingStarted) {
+                    markdown += `## 🚀 Getting Started\n\n${gettingStarted}\n\n`;
+                }
+
+                // Dynamic Content & Badges
+                if (githubUsername || wakatimeUsername || document.getElementById('include-typing-animation').checked || document.getElementById('include-spotify').checked || document.getElementById('include-steam').checked || document.getElementById('include-visitors').checked) {
+                    markdown += `## My GitHub Stats\n\n`;
+
+                    if (document.getElementById('include-typing-animation').checked && typingLines) {
+                        const encodedLines = typingLines.split(';').map(line => encodeURIComponent(line.trim())).join(';');
+                        markdown += `![Typing Animation](https://readme-typing-svg.demolab.com/?lines=${encodedLines}&font=monospace&size=20&color=36BCF7&center=true&vCenter=true&width=400&height=50)\n\n`;
+                    }
+
+                    if (githubUsername) {
+                        if (document.getElementById('include-stats-card').checked) {
+                            markdown += `![GitHub Stats](https://github-readme-stats.vercel.app/api?username=${githubUsername}&show_icons=true&theme=teal&count_private=true)\n\n`;
+                        }
+                        if (document.getElementById('include-languages-card').checked) {
+                            markdown += `![Top Languages Card](https://github-readme-stats.vercel.app/api/top-langs/?username=${githubUsername}&layout=compact&theme=teal)\n\n`;
+                        }
+                        if (document.getElementById('include-activity-graph').checked) {
+                            markdown += `![Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=${githubUsername}&theme=react-dark&bg_color=1f2937&hide_border=true)\n\n`;
+                        }
+                        if (document.getElementById('include-visitors').checked) {
+                            markdown += `![Profile Views](https://profile-counter.glitch.me/${githubUsername}/count.svg)\n\n`;
+                        }
+                    }
+                    
+                    if (wakatimeUsername) {
+                        markdown += `![WakaTime Stats](https://github-readme-stats.vercel.app/api/wakatime?username=${wakatimeUsername}&theme=teal)\n\n`;
+                    }
+                    if (document.getElementById('include-spotify').checked) {
+                        markdown += `![Spotify Now Playing](https://spotify-playing-now-phi.vercel.app/api/spotify)\n\n`;
+                    }
+                    if (document.getElementById('include-steam').checked && steamId) {
+                        markdown += `![Steam Gaming Stats](https://steam-stats-card.vercel.app/api/steam?steamid=${steamId})\n\n`;
+                    }
+                }
+
+                // Credits
+                if (document.getElementById('include-credits').checked) {
+                    markdown += `## Credits\n\n- [Your GitHub Profile](https://github.com/${githubUsername})\n- [Collaborator Name](https://github.com/COLLABORATOR_USERNAME)\n\n`;
+                    markdown += `_Add links to any tutorials or resources you used._\n\n`;
+                }
+
+                // Contributing
+                if (document.getElementById('include-contributing').checked) {
+                    markdown += `## 🤝 Contributing\n\nContributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.\n\n1. Fork the repository\n2. Add your changes\n3. Submit a pull request\n\nHelp us make academic resources accessible to all students �\n\n`;
+                }
+
+                // Roadmap (Future Plans)
+                if (futurePlans.length > 0) {
+                    markdown += `## 🧠 Future Plans\n\n`;
+                    futurePlans.forEach(plan => {
+                        markdown += `- ${plan.trim()}\n`;
+                    });
+                    markdown += `\n`;
+                }
+
+                // Tests
+                if (document.getElementById('include-tests').checked) {
+                    markdown += `## Tests\n\nTo run tests, execute the following command:\n\n\`\`\`bash\nnpm test # or pytest, etc.\n\`\`\`\n\n`;
+                }
+
+                // Known Issues
+                if (document.getElementById('include-issues').checked) {
+                    markdown += `## Known Issues\n\n- Issue 1: Briefly describe the issue.\n- Issue 2: Briefly describe another issue.\n\n`;
+                }
+                
+                // License
+                if (document.getElementById('include-license').checked) {
+                    const licenseType = document.getElementById('generator-license-type').value;
+                    markdown += `## 📄 License\n\nThis project is licensed under the **${licenseType} License**.\n\n`;
+                }
+
+                // Contact
+                if (linkedin || twitter || email) {
+                    markdown += `## Contact\n\n`;
+                    if (linkedin) markdown += `LinkedIn: [${linkedin}](${linkedin})\n`;
+                    if (twitter) markdown += `Twitter: [${twitter}](${twitter})\n`;
+                    if (email) markdown += `Email: ${email}\n`;
+                    markdown += `\n`;
+                }
+
+                generatedOutput.value = markdown.trim();
+            }
+
+            // Attach event listeners to all relevant inputs
+            newGeneratorInputs.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('input', generateReadme);
+                }
+            });
+            newGeneratorCheckboxes.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('change', generateReadme);
+                }
+            });
+            newGeneratorSelects.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('change', generateReadme);
+                }
+            });
+
+            // Initial generation
+            generateReadme();
+
+            // Copy to clipboard functionality
+            copyReadmeBtn.addEventListener('click', () => {
+                generatedOutput.select();
+                generatedOutput.setSelectionRange(0, 99999); // For mobile devices
+                document.execCommand('copy');
+                alert('README Markdown copied to clipboard!');
+            });
+
+            // Download functionality
+            downloadReadmeBtn.addEventListener('click', () => {
+                const filename = (document.getElementById('generator-title').value.trim() || 'README') + '.md';
+                const element = document.createElement('a');
+                element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(generatedOutput.value));
+                element.setAttribute('download', filename);
+                element.style.display = 'none';
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+            });
         });
     </script>
 </body>
 </html>
+
